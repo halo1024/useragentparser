@@ -24,6 +24,8 @@ func ParseBrand(brand string) DeviceBrand {
 		return DeviceBrandOPPO
 	case DeviceBrandOVHM.String():
 		return DeviceBrandOVHM
+	case DeviceBrandHonor.String():
+		return DeviceBrandHonor
 	default:
 		return DeviceBrandOther
 	}
@@ -36,7 +38,8 @@ const (
 	DeviceBrandXiaomi DeviceBrand = "xiaomi"
 	DeviceBrandOPPO   DeviceBrand = "oppo"
 	DeviceBrandOther  DeviceBrand = "other"
-	DeviceBrandOVHM   DeviceBrand = "" // 通投 Brand
+	DeviceBrandOVHM   DeviceBrand = ""      // 通投 Brand
+	DeviceBrandHonor  DeviceBrand = "honor" // 荣耀 TODO 需要实现区分荣耀和华为
 )
 
 type Device struct {
