@@ -41,6 +41,7 @@ func fuzzyBrandMapping() map[string]DeviceBrand {
 		"samsung":   DeviceBrandSAMSUNG,
 		"meizu":     DeviceBrandMEIZU,
 		"lenovo":    DeviceBrandLENOVO,
+		"sm-":       DeviceBrandSAMSUNG,
 	}
 }
 
