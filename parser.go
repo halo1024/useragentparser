@@ -163,7 +163,8 @@ func (parser *userAgentParser) preDetect(agentString string) (userAgent *UserAge
 		mainPart = strings.Replace(mainPart, "zh-tw;", "", 1)
 		mainPart = strings.Replace(mainPart, "zh-mo;", "", 1)
 		mainPart = strings.Replace(mainPart, "zh-hk;", "", 1)
-		mainPart = strings.TrimSpace(mainPart)
+		mainPart = strings.TrimSpace(mainPart) // android 10;  lio-an00 build/huaweilio-an00
+		// android 11; tyh622m build/tianyityh622m; wv
 
 		items = strings.Split(mainPart, ";")
 
@@ -182,7 +183,7 @@ func (parser *userAgentParser) preDetect(agentString string) (userAgent *UserAge
 			model = strings.TrimSpace(strings.Split(items[1], " build")[0])
 		}
 
-		model = strings.Split(model, ",")[0]
+		model = strings.Split(model, ",")[0] //lio-an00  // tyh622m
 	}
 
 	if strings.HasPrefix(agentString, "ting") {
@@ -193,7 +194,7 @@ func (parser *userAgentParser) preDetect(agentString string) (userAgent *UserAge
 		}
 	}
 
-	if systemItems := strings.Split(system, "android"); len(systemItems) > 1 {
+	if systemItems := strings.Split(system, "android"); len(systemItems) > 1 { // {"", "10"}
 		userAgent.Os = &Os{
 			Family:  "Android",
 			Version: strings.Split(strings.TrimSpace(systemItems[1]), ".")[0],
@@ -217,6 +218,12 @@ func (parser *userAgentParser) modelStrToDevice(model string) *Device {
 			Model: model,
 		}
 	}
+	if brand, ok := brandMap[model]; ok {
+		return &Device{
+			Brand: DeviceBrand(brand),
+			Model: model,
+		}
+	}
 
 	for k, v := range parser.FuzzyMapping {
 		if strings.Contains(model, k) {
@@ -227,7 +234,7 @@ func (parser *userAgentParser) modelStrToDevice(model string) *Device {
 		}
 	}
 
-	model = strings.Split(model, " ")[0]
+	model = strings.Split(model, " ")[0] // tyh622m
 
 	if len(model) >= 6 && len(model) <= 7 && model[0] == 'v' &&
 		isNum(model[1]) && isNum(model[2]) && isEn(model[len(model)-1]) {

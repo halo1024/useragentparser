@@ -35,6 +35,12 @@ func fuzzyBrandMapping() map[string]DeviceBrand {
 		"r7plus":    DeviceBrandOPPO,
 		"mi9":       DeviceBrandXiaomi,
 		"shark":     DeviceBrandXiaomi,
+		"pixel":     DeviceBrandGOOGLE,
+		"nexus":     DeviceBrandGOOGLE,
+		"motorola":  DeviceBrandMOTOROLA,
+		"samsung":   DeviceBrandSAMSUNG,
+		"meizu":     DeviceBrandMEIZU,
+		"lenovo":    DeviceBrandLENOVO,
 	}
 }
 

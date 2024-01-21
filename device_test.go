@@ -1,86 +1,16 @@
-// nolint
-package useragentparser_test
+package useragentparser
 
 import (
-	"encoding/json"
 	"fmt"
 	"testing"
 	"time"
 
-	"github.com/gamebtc/devicedetector"
-	"github.com/halo2024/useragentparser"
-	//device_detector "github.com/robicode/device-detector"
-	devicedetector_go "github.com/umutbasal/device-detector-go"
+	device_detector "github.com/robicode/device-detector"
 )
 
-//// 额外的大规模 ua 检测，不提交仅参考
-//func TestDeviceBrandByTxt(t *testing.T) {
-//	file, err := os.Open(fmt.Sprintf("user-agent3.txt"))
-//	defer file.Close()
-//
-//	if err != nil {
-//		fmt.Println(err)
-//	}
-//
-//	brandMapping := map[string]string{
-//		"realme":     "oppo",
-//		"meizu":      "other",
-//		"honor":      "huawei",
-//		"oneplus":    "oppo",
-//		"nubia":      "other",
-//		"blackshark": "xiaomi",
-//	}
-//	scanner := bufio.NewScanner(file)
-//
-//	scanner.Split(bufio.ScanLines)
-//	parser := useragentparser.NewUserAgentParser()
-//
-//	for scanner.Scan() {
-//		var content map[string]interface{}
-//		err := json.Unmarshal(scanner.Bytes(), &content)
-//		if err != nil {
-//			continue
-//		}
-//
-//		ua := content["userAgent"].(string)
-//		if strings.Contains(ua, "AliXAdSDK;") ||
-//			strings.Contains(ua, "TBAndroid/Native") ||
-//			strings.Contains(ua, "SohuVideoMobile") ||
-//			strings.Contains(ua, "ting_") ||
-//			strings.Contains(ua, "Dart/2") ||
-//			strings.Contains(ua, "okhttp") {
-//			continue
-//		}
-//
-//		appBrand := strings.ToLower(content["brand"].(string))
-//		if content["manufacturer"] != nil {
-//			appBrand = strings.ToLower(content["manufacturer"].(string))
-//		}
-//
-//		if strings.Contains(ua, "SHARK") || strings.Contains(ua, "22041216C") {
-//			appBrand = "xiaomi"
-//		}
-//
-//		if brandMapping[appBrand] != "" {
-//			appBrand = brandMapping[appBrand]
-//		}
-//		serverBrand := strings.ToLower(content["brand"].(string))
-//		detectedBrand := strings.ToLower(parser.Parse(ua).Device.Brand)
-//		//if serverBrand != "Vivo" && serverBrand != "oppo" {
-//		//	continue
-//		//}
-//		if detectedBrand != appBrand {
-//			fmt.Println(ua, appBrand, detectedBrand, serverBrand)
-//			if appBrand == "other" {
-//				time.Sleep(10)
-//			} else {
-//				os.Exit(1)
-//			}
-//		}
-//	}
-//}
-
 var cases = [][]string{
+	{"Huawei", "Mozilla/5.0 (Linux; Android 11; SP100 Build/CMDCSP100; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.335 Mobile Safari/537.36 JsSdk/2 NewsArticle/9.6.3 NetType/wifi TTWebView/1141130053420"},
+	{"Huawei", "Mozilla/5.0 (Linux; Android 11; VP005 Build/UNICOMVSENSVP005; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.335 Mobile Safari/537.36 JsSdk/2 NewsArticle/9.6.3 NetType/5g TTWebView/1141130053420"},
 	{"Huawei", "Mozilla/5.0 (Linux; Android 11; VP005 Build/UNICOMVSENSVP005; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.335 Mobile Safari/537.36 JsSdk/2 NewsArticle/9.6.3 NetType/5g TTWebView/1141130053420"},
 	{"Huawei", "Mozilla/5.0 (Linux; Android 11; TYH622M Build/TianyiTYH622M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/117.0.0.0 Mobile Safari/537.36"},
 	{"Huawei", "Mozilla/5.0 (Linux; U; Android 10; zh-CN; LIO-AN00 Build/HUAWEILIO-AN00) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/78.0.3904.108 UCBrowser/13.2.2.1102 Mobile Safari/537.36"},
@@ -137,98 +67,54 @@ var cases = [][]string{
 	{"vivo", "Mozilla/5.0 (Linux; Android 11; V2164A Build/RP1A.200720.012; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36 hap/1.10/vivo com.vivo.hybrid/1.10.5.303 com.tianjinzhaofa.weather/70.0.5 ({\"packageName\":\"com.vivo.hybrid\",\"type\":\"debugger\",\"url_scheme\":false,\"extra\":{\"quick_app_st_channel\":\"VIVO_UNKNOWN_CHANNEL\",\"topRunningAct\":\"org.hapjs.debugger.MainActivity\",\"topRunningPkg\":\"org.hapjs.debugger\"}})"},
 }
 
-func TestParseBrand(t *testing.T) {
-	parser := useragentparser.NewUserAgentParser()
-	uas := cases[0][1]
-	fmt.Println("uas = ", uas)
-	ua := parser.Parse(uas)
-	js, _ := json.Marshal(ua)
-	fmt.Printf("ua = %s", js)
-}
-func BenchmarkUserAgentParser(b *testing.B) {
-	parser := useragentparser.NewUserAgentParser()
-	size := int64(len(cases))
-	b.ReportAllocs()
-	for n := 0; n < b.N; n++ {
-		parser.Parse(cases[time.Now().UnixNano()%size][1])
+func TestDeviceBrand_String(t *testing.T) {
+	//ua := "Mozilla/5.0 (Linux; Android 11; VP005 Build/UNICOMVSENSVP005; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.335 Mobile Safari/537.36 JsSdk/2 NewsArticle/9.6.3 NetType/5g TTWebView/1141130053420"
+	cache, err := device_detector.NewEmbeddedCache()
+	if err != nil {
+		t.Error(err)
 	}
-	// BenchmarkUserAgentParser-8   	   15130	     75946 ns/op	     601 B/op	      15 allocs/op
+
+	for _, casePair := range cases {
+		client := device_detector.New(cache, casePair[1])
+		fmt.Printf("name:%s, DeviceName:%s, DeviceBrand:%s \n", client.Name(), client.DeviceName(), client.DeviceBrand())
+	}
+
 }
 
-func BenchmarkUserAgentParserParallel(b *testing.B) {
-	parser := useragentparser.NewUserAgentParser()
+func TestDeviceBrand_String2(t *testing.T) {
+	cache, err := device_detector.NewEmbeddedCache()
+	if err != nil {
+		t.Error(err)
+	}
+
+	client := device_detector.New(cache, cases[4][1])
+	fmt.Printf("name:%s, DeviceName:%s, DeviceBrand:%s \n", client.Name(), client.DeviceName(), client.DeviceBrand())
+}
+
+func BenchmarkDeviceBrand_String(b *testing.B) {
+	cache, err := device_detector.NewEmbeddedCache()
+	if err != nil {
+		b.Error(err)
+	}
 	size := int64(len(cases))
 
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
-			parser.Parse(cases[time.Now().UnixNano()%size][1])
+			device_detector.New(cache, cases[time.Now().UnixNano()%size][1])
 		}
 	})
-	// BenchmarkUserAgentParserParallel-8   	   48577	     22204 ns/op
+	//BenchmarkDeviceBrand_String-8   	      57	  19186227 ns/op
 }
 
-func TestDeviceBrandDetect(t *testing.T) {
-	parser := useragentparser.NewUserAgentParser()
-
-	for _, casePair := range cases {
-		ua := parser.Parse(casePair[1])
-		fmt.Println(ua.Device.Brand, ua.Device.Model, ua.Os.Family, ua.Os.Version)
-		// fmt.Println(ua.Device.Brand, ua.Os.Family, ua.Os.Version)
-		// t.Error(casePair[1])
-		//assert.Equal(t, casePair[0], ua.Device.Brand.String())
-	}
-}
-
-func TestNewUserAgentParser(t *testing.T) {
-	//cache, err := device_detector.NewEmbeddedCache()
-	//if err != nil{
-	//	t.Error(err)
-	//}
-	//parser := useragentparser.NewUserAgentParser()
-	//for _, casePair := range cases {
-	//	ua := parser.Parse(casePair[1])
-	//	fmt.Println("==", ua.Device.Brand, ua.Device.Model, ua.Os.Family, ua.Os.Version)
-	//	client := device_detector.New(cache, casePair[1])
-	//	fmt.Println("##", client.Name(), client.DeviceName())
-	//	break
-	//}
-}
-
-func TestDeviceBrand(t *testing.T) {
-	detector, err := devicedetector_go.NewDeviceDetector(devicedetector_go.DeviceDetectorOptions{})
+func BenchmarkDeviceBrand_String2(b *testing.B) {
+	cache, err := device_detector.NewEmbeddedCache()
 	if err != nil {
-		panic(err)
-	}
-	parser := useragentparser.NewUserAgentParser()
-	dd, err := devicedetector.NewDeviceDetector("/Users/sheng/work/go-projects/devicedetector/regexes")
-	if err != nil {
-		panic(err)
-	}
-
-	for _, casePair := range cases {
-		ua := parser.Parse(casePair[1])
-		fmt.Println("---", ua.Device.Brand, ua.Device.Model, ua.Os.Family, ua.Os.Version)
-		// fmt.Println(ua.Device.Brand, ua.Os.Family, ua.Os.Version)
-		result, err := detector.Parse(casePair[1])
-		if err != nil {
-			t.Error(err)
-		}
-		fmt.Printf("%s\n", result)
-		info := dd.Parse(casePair[1])
-		os := info.GetOs()
-		fmt.Println("===x", info.Brand, info.Model, os.Name, os.Version)
-	}
-
-}
-
-func BenchmarkDeviceBrand(b *testing.B) {
-	detector, err := devicedetector_go.NewDeviceDetector(devicedetector_go.DeviceDetectorOptions{})
-	if err != nil {
-		panic(err)
+		b.Error(err)
 	}
 	size := int64(len(cases))
 	b.ReportAllocs()
 	for n := 0; n < b.N; n++ {
-		detector.Parse(cases[time.Now().UnixNano()%size][1])
+		device_detector.New(cache, cases[time.Now().UnixNano()%size][1])
 	}
+	// BenchmarkDeviceBrand_String2-8   	      25	  64406898 ns/op	 3491216 B/op	   60985 allocs/op
 }
