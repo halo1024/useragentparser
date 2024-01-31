@@ -40,19 +40,25 @@ func ParseBrand(brand string) DeviceBrand {
 }
 
 const (
-	DeviceBrandApple    DeviceBrand = "apple"
-	DeviceBrandVIVO     DeviceBrand = "vivo"
-	DeviceBrandHuawei   DeviceBrand = "huawei"
-	DeviceBrandXiaomi   DeviceBrand = "xiaomi"
-	DeviceBrandOPPO     DeviceBrand = "oppo"
-	DeviceBrandHonor    DeviceBrand = "honor" // 荣耀 TODO 需要实现区分荣耀和华为
-	DeviceBrandGOOGLE   DeviceBrand = "google"
-	DeviceBrandSAMSUNG  DeviceBrand = "samsung"
-	DeviceBrandMOTOROLA DeviceBrand = "motorola"
-	DeviceBrandLENOVO   DeviceBrand = "lenovo"
-	DeviceBrandMEIZU    DeviceBrand = "meizu"
-	DeviceBrandOther    DeviceBrand = "other"
-	DeviceBrandOVHM     DeviceBrand = "" // 通投 Brand
+	DeviceBrandApple      DeviceBrand = "apple"
+	DeviceBrandVIVO       DeviceBrand = "vivo"
+	DeviceBrandHuawei     DeviceBrand = "huawei"
+	DeviceBrandXiaomi     DeviceBrand = "xiaomi"
+	DeviceBrandOPPO       DeviceBrand = "oppo"
+	DeviceBrandHonor      DeviceBrand = "honor" // 荣耀 TODO 需要实现区分荣耀和华为
+	DeviceBrandGOOGLE     DeviceBrand = "google"
+	DeviceBrandSAMSUNG    DeviceBrand = "samsung"
+	DeviceBrandMOTOROLA   DeviceBrand = "motorola"
+	DeviceBrandLENOVO     DeviceBrand = "lenovo"
+	DeviceBrandMEIZU      DeviceBrand = "meizu"
+	DeviceBrand360        DeviceBrand = "360"
+	DeviceBrandONEPLUS    DeviceBrand = "oneplus"
+	DeviceBrandNUBIA      DeviceBrand = "nubia"
+	DeviceBrandNOKIA      DeviceBrand = "nokia"
+	DeviceBrandCOOLPAD    DeviceBrand = "coolpad"
+	DeviceBrandBLACKSHARK DeviceBrand = "blackshark"
+	DeviceBrandOther      DeviceBrand = "other"
+	DeviceBrandOVHM       DeviceBrand = "" // 通投 Brand
 )
 
 type Device struct {

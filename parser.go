@@ -97,7 +97,7 @@ func (parser *userAgentParser) parseDevice(agentString string) *Device {
 	}
 
 	if !found {
-		dvc.Brand = "Other"
+		dvc.Brand = DeviceBrandOther
 	}
 
 	return dvc
